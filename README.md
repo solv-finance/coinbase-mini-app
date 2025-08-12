@@ -25,7 +25,7 @@ A modern Next.js starter template featuring:
 
 ### Installation
 ```bash
-npx create-next-app -e https://github.com/solv-finance-dev/solv-mini-app.git
+npx create-next-app -e https://github.com/solv-finance/coinbase-mini-app.git
 cd your-app
 yarn install
 ```
@@ -86,7 +86,7 @@ export function Providers({ children }) {
 Pre-configured chains and connectors in `lib/wagmi.ts`:
 ```typescript
 const { chains, publicClient } = configureChains(
-  [mainnet, sepolia],
+  [base],
   [publicProvider()]
 )
 ```
