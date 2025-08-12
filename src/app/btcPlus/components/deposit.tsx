@@ -77,7 +77,11 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
   const { connect, connectors } = useConnect();
 
   // get base balance
-  const { data: baseBalanceOf, status: baseBalanceStatus } = useReadContract({
+  const {
+    data: baseBalanceOf,
+    status: baseBalanceStatus,
+    refetch: refetchBaseBalance
+  } = useReadContract({
     abi: erc20Abi,
     address: selectedCurrency?.currencyAddress,
     functionName: "balanceOf",
@@ -93,7 +97,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
 
   const {
     data: targetBalanceOf,
-    refetch: refetchBalance,
+    refetch: refetchTargetBalance,
     status: targetBalanceStatus
   } = useReadContract({
     abi: erc20Abi,
@@ -262,7 +266,6 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     if (approveSuccess) {
       console.info("Approve Success");
       resetDepositWrite();
-      refetchBalance();
     }
 
     if (depositLoading) {
@@ -279,6 +282,8 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
       console.error("Deposit Error");
     }
     if (depositSuccess) {
+      refetchTargetBalance();
+      refetchBaseBalance();
       setTradingOpen(false);
       setTradingResultTitle("Deposited successfully");
       setTradingResultInfo(
@@ -293,7 +298,8 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     setTradingHash,
     setTradingInfo,
     resetDepositWrite,
-    refetchBalance,
+    refetchBaseBalance,
+    refetchTargetBalance,
     depositLoading,
     depositError,
     depositSuccess

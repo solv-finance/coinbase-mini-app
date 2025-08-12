@@ -165,10 +165,10 @@ const Withdraw = ({
     if (approveSuccess) {
       console.info("Approve Success");
       resetWithdrawWrite();
-      refetchBalance();
     }
 
     if (withdrawLoading) {
+      refetchBalance();
       setTradingOpen(true);
       setTradingHash(withdrawDataHash);
       setTradingInfo(
