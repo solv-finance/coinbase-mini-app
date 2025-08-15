@@ -9,6 +9,21 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
     description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
+    openGraph: {
+      title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
+      description: process.env.NEXT_PUBLIC_APP_OG_DESCRIPTION,
+      images: [
+        {
+          url: `${process.env.NEXT_PUBLIC_APP_HERO_IMAGE}`
+        }
+      ]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
+      description: process.env.NEXT_PUBLIC_APP_OG_DESCRIPTION,
+      images: [`${process.env.NEXT_PUBLIC_APP_HERO_IMAGE}`]
+    },
     other: {
       "fc:frame": JSON.stringify({
         version: "1",
@@ -19,6 +34,21 @@ export async function generateMetadata(): Promise<Metadata> {
             type: "launch_frame",
             name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
             url: process.env.NEXT_PUBLIC_URL,
+            splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE,
+            splashBackgroundColor:
+              process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR
+          }
+        }
+      }),
+      "fc:miniapp": JSON.stringify({
+        version: "next",
+        imageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
+        button: {
+          title: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}`,
+          action: {
+            type: "launch_frame",
+            name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
+            url: URL,
             splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE,
             splashBackgroundColor:
               process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR
