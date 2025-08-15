@@ -9,21 +9,21 @@ export async function generateMetadata(): Promise<Metadata> {
   const URL = process.env.NEXT_PUBLIC_URL;
   return {
     title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-    description: "Solv Mini App - The Future of Bitcoin Finance",
+    description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
     openGraph: {
       title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-      description: "Solv Mini App - The Future of Bitcoin Finance",
+      description: process.env.NEXT_PUBLIC_APP_OG_DESCRIPTION,
       images: [
         {
-          url: "/cover.png"
+          url: `${process.env.NEXT_PUBLIC_APP_HERO_IMAGE}`
         }
       ]
     },
     twitter: {
       card: "summary_large_image",
       title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-      description: "Solv Mini App - The Future of Bitcoin Finance",
-      images: ["/cover.png"]
+      description: process.env.NEXT_PUBLIC_APP_OG_DESCRIPTION,
+      images: [`${process.env.NEXT_PUBLIC_APP_HERO_IMAGE}`]
     },
     other: {
       "fc:frame": JSON.stringify({
