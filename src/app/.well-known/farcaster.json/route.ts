@@ -37,7 +37,9 @@ export async function GET() {
       ogTitle: process.env.NEXT_PUBLIC_APP_OG_TITLE,
       ogDescription: process.env.NEXT_PUBLIC_APP_OG_DESCRIPTION,
       ogImageUrl: process.env.NEXT_PUBLIC_APP_OG_IMAGE,
-      requiredChains: ["eip155:8453"]
+      requiredChains: ["eip155:8453"],
+      castShareUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
+      buttonTitle: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}`
     })
   });
 }
