@@ -12,8 +12,6 @@ function withValidProperties(
 }
 
 export async function GET() {
-  const URL = process.env.NEXT_PUBLIC_URL;
-
   return Response.json({
     accountAssociation: {
       header: process.env.FARCASTER_HEADER,
@@ -23,19 +21,19 @@ export async function GET() {
     frame: withValidProperties({
       version: "1",
       name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-      subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
-      description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
-      screenshotUrls: [`${process.env.NEXT_PUBLIC_APP_ICON}`],
+      homeUrl: process.env.NEXT_PUBLIC_URL,
       iconUrl: process.env.NEXT_PUBLIC_APP_ICON,
       splashImageUrl: process.env.NEXT_PUBLIC_APP_SPLASH_IMAGE,
       splashBackgroundColor: process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
-      homeUrl: URL,
-      imageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
-      webhookUrl: `${URL}/api/webhook`,
+      webhookUrl: `${process.env.NEXT_PUBLIC_URL}/api/webhook`,
+      subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
+      description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
+      screenshotUrls: [`${process.env.NEXT_PUBLIC_APP_ICON}`],
       primaryCategory: process.env.NEXT_PUBLIC_APP_PRIMARY_CATEGORY,
-      tags: [],
+      tags: ["miniapp", "baseapp"],
       heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
       tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
+      imageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
       ogTitle: process.env.NEXT_PUBLIC_APP_OG_TITLE,
       ogDescription: process.env.NEXT_PUBLIC_APP_OG_DESCRIPTION,
       ogImageUrl: process.env.NEXT_PUBLIC_APP_OG_IMAGE
