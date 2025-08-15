@@ -30,13 +30,14 @@ export async function GET() {
       description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
       screenshotUrls: [`${process.env.NEXT_PUBLIC_APP_ICON}`],
       primaryCategory: process.env.NEXT_PUBLIC_APP_PRIMARY_CATEGORY,
-      tags: ["miniapp", "baseapp"],
+      tags: ["finance", "onchain"],
       heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
       tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
       imageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
       ogTitle: process.env.NEXT_PUBLIC_APP_OG_TITLE,
       ogDescription: process.env.NEXT_PUBLIC_APP_OG_DESCRIPTION,
-      ogImageUrl: process.env.NEXT_PUBLIC_APP_OG_IMAGE
+      ogImageUrl: process.env.NEXT_PUBLIC_APP_OG_IMAGE,
+      requiredChains: ["eip155:8453"]
     })
   });
 }
