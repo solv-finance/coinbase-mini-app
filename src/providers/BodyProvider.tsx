@@ -14,10 +14,7 @@ const BodyProvider = ({ children }: { children: ReactNode }) => {
   return (
     <div className="max-w-[500px] mx-auto">
       <Header className="max-w-[500px] mx-auto" />
-      <div className="pt-[50px]">
-        {noticeOpen ? <Notice /> : null}
-        {children}
-      </div>
+      <div className="pt-[50px]">{children}</div>
       <TradingDialog />
       <TradingResult />
     </div>
