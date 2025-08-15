@@ -39,7 +39,9 @@ export async function GET() {
       ogImageUrl: process.env.NEXT_PUBLIC_APP_OG_IMAGE,
       requiredChains: ["eip155:8453"],
       castShareUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
-      buttonTitle: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}`
+      buttonTitle: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}`,
+      requiredCapabilities: ["wallet.getEthereumProvider"],
+      canonicalDomain: process.env.NEXT_PUBLIC_URL
     })
   });
 }
