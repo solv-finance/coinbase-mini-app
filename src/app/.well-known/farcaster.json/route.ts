@@ -30,7 +30,7 @@ export async function GET() {
       description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
       screenshotUrls: [`${process.env.NEXT_PUBLIC_APP_ICON}`],
       primaryCategory: process.env.NEXT_PUBLIC_APP_PRIMARY_CATEGORY,
-      tags: ["finance", "onchain"],
+      tags: ["Solv", "finance", "Bitcoin"],
       heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
       tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
       imageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
