@@ -1,16 +1,3 @@
-function withValidProperties(
-  properties: Record<string, undefined | string | string[]>
-) {
-  return Object.fromEntries(
-    Object.entries(properties).filter(([key, value]) => {
-      if (Array.isArray(value)) {
-        return value.length > 0;
-      }
-      return !!value;
-    })
-  );
-}
-
 export async function GET() {
   return Response.json({
     accountAssociation: {
@@ -18,30 +5,24 @@ export async function GET() {
       payload: process.env.FARCASTER_PAYLOAD,
       signature: process.env.FARCASTER_SIGNATURE
     },
-    frame: withValidProperties({
-      version: "1",
-      name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-      homeUrl: process.env.NEXT_PUBLIC_URL,
-      iconUrl: process.env.NEXT_PUBLIC_APP_ICON,
-      splashImageUrl: process.env.NEXT_PUBLIC_APP_SPLASH_IMAGE,
-      splashBackgroundColor: process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
-      webhookUrl: `${process.env.NEXT_PUBLIC_URL}/api/webhook`,
-      subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
-      description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
-      screenshotUrls: [`${process.env.NEXT_PUBLIC_APP_ICON}`],
-      primaryCategory: process.env.NEXT_PUBLIC_APP_PRIMARY_CATEGORY,
-      tags: ["Solv", "finance", "Bitcoin"],
-      heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
-      tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
-      imageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
-      ogTitle: process.env.NEXT_PUBLIC_APP_OG_TITLE,
-      ogDescription: process.env.NEXT_PUBLIC_APP_OG_DESCRIPTION,
-      ogImageUrl: process.env.NEXT_PUBLIC_APP_OG_IMAGE,
-      requiredChains: ["eip155:8453"],
-      castShareUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
-      buttonTitle: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}`,
-      requiredCapabilities: ["wallet.getEthereumProvider"],
-      canonicalDomain: process.env.NEXT_PUBLIC_URL
-    })
+    version: "1",
+    name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
+    homeUrl: process.env.NEXT_PUBLIC_URL,
+    iconUrl: process.env.NEXT_PUBLIC_APP_ICON,
+    splashImageUrl: process.env.NEXT_PUBLIC_APP_SPLASH_IMAGE,
+    splashBackgroundColor: process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
+    subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
+    description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
+    screenshotUrls: [`${process.env.NEXT_PUBLIC_APP_ICON}`],
+    primaryCategory: process.env.NEXT_PUBLIC_APP_PRIMARY_CATEGORY,
+    tags: ["Solv", "finance", "Bitcoin"],
+    heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
+    tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
+    imageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
+    requiredChains: ["eip155:8453"],
+    castShareUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
+    buttonTitle: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}`,
+    requiredCapabilities: ["wallet.getEthereumProvider"],
+    noindex: false
   });
 }
