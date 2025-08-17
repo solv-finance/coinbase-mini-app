@@ -21,26 +21,19 @@ export async function GET() {
     frame: withValidProperties({
       version: "1",
       name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-      homeUrl: process.env.NEXT_PUBLIC_URL,
       iconUrl: process.env.NEXT_PUBLIC_APP_ICON,
-      splashImageUrl: process.env.NEXT_PUBLIC_APP_SPLASH_IMAGE,
-      splashBackgroundColor: process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
-      subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
-      description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
-      screenshotUrls: [`${process.env.NEXT_PUBLIC_APP_ICON}`],
-      primaryCategory: process.env.NEXT_PUBLIC_APP_PRIMARY_CATEGORY,
-      tags: ["Solv", "finance", "Bitcoin"],
-      heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
-      tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
+      homeUrl: process.env.NEXT_PUBLIC_URL,
       imageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
+      heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
       ogTitle: process.env.NEXT_PUBLIC_APP_OG_TITLE,
       ogDescription: process.env.NEXT_PUBLIC_APP_OG_DESCRIPTION,
       ogImageUrl: process.env.NEXT_PUBLIC_APP_OG_IMAGE,
-      requiredChains: ["eip155:8453"],
-      castShareUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
-      buttonTitle: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}`,
-      requiredCapabilities: ["wallet.getEthereumProvider"],
-      canonicalDomain: process.env.NEXT_PUBLIC_URL
+      primaryCategory: process.env.NEXT_PUBLIC_APP_PRIMARY_CATEGORY,
+      splashImageUrl: process.env.NEXT_PUBLIC_APP_SPLASH_IMAGE,
+      splashImageBackgroundColor: "#fff",
+      subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
+      tags: ["defi", "dex", "solv", "bitcoin"],
+      tagline: process.env.NEXT_PUBLIC_APP_TAGLINE
     })
   });
 }
