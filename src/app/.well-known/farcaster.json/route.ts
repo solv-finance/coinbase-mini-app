@@ -32,7 +32,7 @@ export async function GET() {
       splashImageUrl: process.env.NEXT_PUBLIC_APP_SPLASH_IMAGE,
       splashImageBackgroundColor: "#fff",
       subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
-      tags: ["defi", "dex", "solv", "bitcoin"],
+      tags: ["solv", "defi", "dex", "bitcoin"],
       tagline: process.env.NEXT_PUBLIC_APP_TAGLINE
     })
   });
