@@ -86,8 +86,7 @@ const Info = () => {
           <Skeleton className="h-10 w-full" loading />
         ) : (
           <div className="text-[28px] font-MatterSQ-SemiBold">
-            {(Number(btcPlusState?.btcPlusStats?.tvl) || 0).toFixed(2)} BTC /{" "}
-            {(Number(btcPlusState?.btcPlusStats?.cap) || 0).toFixed(2)} BTC
+            {(Number(btcPlusState?.btcPlusStats?.tvl) || 0).toFixed(2)} BTC
           </div>
         )}
 
