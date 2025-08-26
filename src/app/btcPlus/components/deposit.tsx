@@ -66,9 +66,16 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
 
   const [selectedCurrency, setSelectedCurrency] = useState<any>(null);
 
+  const baseTokenList = useMemo(() => {
+    return (
+      poolCurrencies?.getPoolCurrencies?.currencies &&
+      [...poolCurrencies?.getPoolCurrencies?.currencies].reverse()
+    );
+  }, [poolCurrencies?.getPoolCurrencies?.currencies]);
+
   useEffect(() => {
-    if (poolCurrencies?.getPoolCurrencies?.currencies) {
-      setSelectedCurrency(poolCurrencies?.getPoolCurrencies?.currencies[1]);
+    if (baseTokenList) {
+      setSelectedCurrency(baseTokenList[0]);
     }
   }, [poolCurrencies]);
 
@@ -455,31 +462,29 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
                 </div>
               </DropdownMenu.Trigger>
               <DropdownMenu.Content align="end">
-                {poolCurrencies?.getPoolCurrencies?.currencies &&
-                  poolCurrencies?.getPoolCurrencies?.currencies?.map(
-                    (currency: any) => (
-                      <DropdownMenu.Item
-                        className="!px-2"
-                        key={currency.currencyAddress}
-                        onClick={() => {
-                          setSelectedCurrency(currency);
-                          refetchFee();
-                        }}
-                      >
-                        <Image
-                          src={GET_TOKEN_ICON(currency.symbol)}
-                          alt={currency.symbol}
-                          width={16}
-                          height={16}
-                        />
-                        <span className="text-sm">{currency.symbol}</span>
-                        {selectedCurrency?.currencyAddress ===
-                          currency.currencyAddress && (
-                          <CheckIcon className="text-mainColor w-5 h-5" />
-                        )}
-                      </DropdownMenu.Item>
-                    )
-                  )}
+                {baseTokenList &&
+                  baseTokenList?.map((currency: any) => (
+                    <DropdownMenu.Item
+                      className="!px-2"
+                      key={currency.currencyAddress}
+                      onClick={() => {
+                        setSelectedCurrency(currency);
+                        refetchFee();
+                      }}
+                    >
+                      <Image
+                        src={GET_TOKEN_ICON(currency.symbol)}
+                        alt={currency.symbol}
+                        width={16}
+                        height={16}
+                      />
+                      <span className="text-sm">{currency.symbol}</span>
+                      {selectedCurrency?.currencyAddress ===
+                        currency.currencyAddress && (
+                        <CheckIcon className="text-mainColor w-5 h-5" />
+                      )}
+                    </DropdownMenu.Item>
+                  ))}
               </DropdownMenu.Content>
             </DropdownMenu.Root>
           </div>
