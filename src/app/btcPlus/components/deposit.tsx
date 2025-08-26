@@ -68,7 +68,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
 
   useEffect(() => {
     if (poolCurrencies?.getPoolCurrencies?.currencies) {
-      setSelectedCurrency(poolCurrencies?.getPoolCurrencies?.currencies[0]);
+      setSelectedCurrency(poolCurrencies?.getPoolCurrencies?.currencies[1]);
     }
   }, [poolCurrencies]);
 
