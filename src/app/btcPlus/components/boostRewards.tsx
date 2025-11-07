@@ -162,19 +162,19 @@ const BoostRewards = () => {
                           "!h-6 !rounded-full !bg-grayColor/10 !text-grayColor",
                           {
                             "!bg-grayColor/10 !text-grayColor cursor-not-allowed":
-                              !data.btcPlusRewardByAddress?.isEligible,
+                              true
                           },
-                          {
-                            "!bg-mainColor !text-white hover:opacity-90":
-                              data.btcPlusRewardByAddress?.isEligible,
-                          }
+                          // {
+                          //   "!bg-mainColor !text-white hover:opacity-90":
+                          //     data.btcPlusRewardByAddress?.isEligible,
+                          // }
                         )}
                         onClick={() => {
-                          data.btcPlusRewardByAddress?.isEligible &&
-                            window.open(
-                              "https://solv.foundation/btc+reward",
-                              "_blank"
-                            );
+                          // data.btcPlusRewardByAddress?.isEligible &&
+                            // window.open(
+                            //   "https://solv.foundation/btc+reward",
+                            //   "_blank"
+                            // );
                         }}
                       >
                         <span className="text-sm">Claim</span>
@@ -187,7 +187,7 @@ const BoostRewards = () => {
                       hidden={data.btcPlusRewardByAddress?.isEligible}
                     >
                       <p className="text-sm">
-                        BTC+ Phase 1 Reward minimum claim is 10 $SOLV. Amounts below are not eligible to claim.
+                        Claim your $SOLV Boost Rewards after the end of BTC+ Phase 1 campaign.
                       </p>
                     </Popover.Content>
                   </Popover.Root>
