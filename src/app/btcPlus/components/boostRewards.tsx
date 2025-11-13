@@ -145,7 +145,7 @@ const BoostRewards = () => {
             {data?.btcPlusRewardByAddress ? (
               <div className="flex flex-col gap-2">
                 <div className="text-[18px] font-MatterSQ-Medium">
-                  {thousandsValueFormat(
+                  ${thousandsValueFormat(
                     toFixed(
                       data?.btcPlusRewardByAddress?.estimatedReward || 0,
                       1,
