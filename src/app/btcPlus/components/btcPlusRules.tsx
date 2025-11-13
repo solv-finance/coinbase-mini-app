@@ -29,14 +29,17 @@ const BtcPlusRule = () => {
       <Card className="w-full !p-6">
         <div className="text-[24px] font-MatterSQ-Medium mb-4">Risk</div>
         <div className="h-[auto] flex-1 font-MatterSQ-Regular text-sm">
-          <p>
-            BTC+ carries smart contract and economic risks, including
-            impermanent loss. Its security depends on the underlying protocols’
-            reliability and audits.
+           <p>
+            BTC+ invests in vaults that deposit into DeFi and CeFi products,
+            exposing users to smart contract vulnerabilities, third-party
+            protocol exploits, counterparty and insolvency risks, market
+            volatility, and operational dependencies.
           </p>
           <p>
-            We encourage users to evaluate these risks carefully before
-            depositing.
+            While Solv employs institutional-grade security, multi-layer audits,
+            and real-time monitoring to mitigate these risks, losses can still
+            occur. Users must independently evaluate suitability before
+            investing.
           </p>
         </div>
       </Card>
