@@ -164,7 +164,6 @@ const Deposit = ({
     if (approveSuccess) {
       console.info("Approve Success");
       resetDepositWrite();
-      refetchBalance();
     }
 
     if (depositLoading) {
@@ -176,6 +175,7 @@ const Deposit = ({
     }
 
     if (depositSuccess) {
+      refetchBalance();
       setTradingOpen(false);
       setTradingResultTitle("Deposited successfully");
       setTradingResultInfo(

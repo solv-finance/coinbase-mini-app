@@ -66,9 +66,16 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
 
   const [selectedCurrency, setSelectedCurrency] = useState<any>(null);
 
+  const baseTokenList = useMemo(() => {
+    return (
+      poolCurrencies?.getPoolCurrencies?.currencies &&
+      [...poolCurrencies?.getPoolCurrencies?.currencies].reverse()
+    );
+  }, [poolCurrencies?.getPoolCurrencies?.currencies]);
+
   useEffect(() => {
-    if (poolCurrencies?.getPoolCurrencies?.currencies) {
-      setSelectedCurrency(poolCurrencies?.getPoolCurrencies?.currencies[0]);
+    if (baseTokenList) {
+      setSelectedCurrency(baseTokenList[0]);
     }
   }, [poolCurrencies]);
 
@@ -77,7 +84,11 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
   const { connect, connectors } = useConnect();
 
   // get base balance
-  const { data: baseBalanceOf, status: baseBalanceStatus } = useReadContract({
+  const {
+    data: baseBalanceOf,
+    status: baseBalanceStatus,
+    refetch: refetchBaseBalance
+  } = useReadContract({
     abi: erc20Abi,
     address: selectedCurrency?.currencyAddress,
     functionName: "balanceOf",
@@ -93,7 +104,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
 
   const {
     data: targetBalanceOf,
-    refetch: refetchBalance,
+    refetch: refetchTargetBalance,
     status: targetBalanceStatus
   } = useReadContract({
     abi: erc20Abi,
@@ -262,7 +273,6 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     if (approveSuccess) {
       console.info("Approve Success");
       resetDepositWrite();
-      refetchBalance();
     }
 
     if (depositLoading) {
@@ -279,6 +289,8 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
       console.error("Deposit Error");
     }
     if (depositSuccess) {
+      refetchTargetBalance();
+      refetchBaseBalance();
       setTradingOpen(false);
       setTradingResultTitle("Deposited successfully");
       setTradingResultInfo(
@@ -293,7 +305,8 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     setTradingHash,
     setTradingInfo,
     resetDepositWrite,
-    refetchBalance,
+    refetchBaseBalance,
+    refetchTargetBalance,
     depositLoading,
     depositError,
     depositSuccess
@@ -449,31 +462,29 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
                 </div>
               </DropdownMenu.Trigger>
               <DropdownMenu.Content align="end">
-                {poolCurrencies?.getPoolCurrencies?.currencies &&
-                  poolCurrencies?.getPoolCurrencies?.currencies?.map(
-                    (currency: any) => (
-                      <DropdownMenu.Item
-                        className="!px-2"
-                        key={currency.currencyAddress}
-                        onClick={() => {
-                          setSelectedCurrency(currency);
-                          refetchFee();
-                        }}
-                      >
-                        <Image
-                          src={GET_TOKEN_ICON(currency.symbol)}
-                          alt={currency.symbol}
-                          width={16}
-                          height={16}
-                        />
-                        <span className="text-sm">{currency.symbol}</span>
-                        {selectedCurrency?.currencyAddress ===
-                          currency.currencyAddress && (
-                          <CheckIcon className="text-mainColor w-5 h-5" />
-                        )}
-                      </DropdownMenu.Item>
-                    )
-                  )}
+                {baseTokenList &&
+                  baseTokenList?.map((currency: any) => (
+                    <DropdownMenu.Item
+                      className="!px-2"
+                      key={currency.currencyAddress}
+                      onClick={() => {
+                        setSelectedCurrency(currency);
+                        refetchFee();
+                      }}
+                    >
+                      <Image
+                        src={GET_TOKEN_ICON(currency.symbol)}
+                        alt={currency.symbol}
+                        width={16}
+                        height={16}
+                      />
+                      <span className="text-sm">{currency.symbol}</span>
+                      {selectedCurrency?.currencyAddress ===
+                        currency.currencyAddress && (
+                        <CheckIcon className="text-mainColor w-5 h-5" />
+                      )}
+                    </DropdownMenu.Item>
+                  ))}
               </DropdownMenu.Content>
             </DropdownMenu.Root>
           </div>

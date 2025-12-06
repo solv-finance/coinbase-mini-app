@@ -53,7 +53,7 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
   // get base balance
   const {
     data: baseBalanceOf,
-    refetch: refetchBalance,
+    refetch: refetchBaseBalance,
     status: baseBalanceStatus
   } = useReadContract({
     abi: erc20Abi,
@@ -74,19 +74,21 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
   }, [baseBalanceOf, btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.decimals]);
 
   // get target balance
-  const { data: targetBalanceOf, status: targetBalanceStatus } =
-    useReadContract({
-      abi: erc20Abi,
-      address:
-        btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.currencyAddress,
-      functionName: "balanceOf",
-      args: [address as Address],
-      query: {
-        enabled:
-          !!btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.currencyAddress &&
-          !!address
-      }
-    });
+  const {
+    data: targetBalanceOf,
+    status: targetBalanceStatus,
+    refetch: refetchTargetBalance
+  } = useReadContract({
+    abi: erc20Abi,
+    address: btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.currencyAddress,
+    functionName: "balanceOf",
+    args: [address as Address],
+    query: {
+      enabled:
+        !!btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.currencyAddress &&
+        !!address
+    }
+  });
 
   const targetBalance = useMemo(() => {
     return formatUnits(
@@ -240,7 +242,6 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     if (approveSuccess) {
       console.info("Approve Success");
       resetwithdrawWrite();
-      refetchBalance();
     }
 
     if (withdrawLoading) {
@@ -254,6 +255,8 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     }
 
     if (withdrawSuccess) {
+      refetchBaseBalance();
+      refetchTargetBalance();
       setTradingOpen(false);
       setTradingResultTitle("Submitted successfully");
 
@@ -271,7 +274,8 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     setTradingHash,
     setTradingInfo,
     resetwithdrawWrite,
-    refetchBalance
+    refetchBaseBalance,
+    refetchTargetBalance
   ]);
 
   const withdrawChange = (e: React.ChangeEvent<HTMLInputElement>) => {
