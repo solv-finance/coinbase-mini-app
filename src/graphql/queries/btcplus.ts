@@ -50,6 +50,7 @@ export const QueryBtcPlusRewardByAddress = gql`
       rewardPower
       currentTotalRewardPower
       estimatedReward
+      isEligible
     }
   }
 `;

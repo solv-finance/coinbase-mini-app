@@ -2,7 +2,7 @@ import {
   beautyAmount,
   dateUTCFormat,
   thousandsValueFormat,
-  toFixed
+  toFixed,
 } from "@/lib/utils";
 import Image from "next/image";
 import { useAccount } from "wagmi";
@@ -13,6 +13,7 @@ import { useQuery } from "@apollo/client";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { GET_TOKEN_ICON } from "@/lib";
 import { useBtcPlusStore } from "@/states";
+import classNames from "classnames";
 
 const BoostRewards = () => {
   const { address } = useAccount();
@@ -20,9 +21,9 @@ const BoostRewards = () => {
   const { data } = useQuery(QueryBtcPlusRewardByAddress, {
     variables: {
       address: address,
-      stageNo: 1
+      stageNo: 1,
     },
-    skip: !address
+    skip: !address,
   });
 
   const { btcPlusStats } = useBtcPlusStore();
@@ -50,7 +51,7 @@ const BoostRewards = () => {
                   ${" "}
                   {beautyAmount({
                     value: btcPlusStats?.totalRewards || 0,
-                    poly: false
+                    poly: false,
                   })}{" "}
                   SOLV
                 </span>
@@ -91,7 +92,7 @@ const BoostRewards = () => {
                   $
                   {beautyAmount({
                     value: data?.btcPlusRewardByAddress?.balanceUSD || 0,
-                    fixed: 2
+                    fixed: 2,
                   })}
                 </div>
                 <div className="text-base text-grayColor font-MatterSQ-Medium text-right">
@@ -144,7 +145,7 @@ const BoostRewards = () => {
             {data?.btcPlusRewardByAddress ? (
               <div className="flex flex-col gap-2">
                 <div className="text-[18px] font-MatterSQ-Medium">
-                  {thousandsValueFormat(
+                  ${thousandsValueFormat(
                     toFixed(
                       data?.btcPlusRewardByAddress?.estimatedReward || 0,
                       1,
@@ -156,7 +157,26 @@ const BoostRewards = () => {
                 <div className="flex justify-end">
                   <Popover.Root>
                     <Popover.Trigger>
-                      <Button className="!h-6 !rounded-full !bg-grayColor/10 !text-grayColor">
+                      <Button
+                        className={classNames(
+                          "!h-6 !rounded-full !bg-grayColor/10 !text-grayColor",
+                          {
+                            "!bg-grayColor/10 !text-grayColor cursor-not-allowed":
+                              !data.btcPlusRewardByAddress?.isEligible,
+                          },
+                          {
+                            "!bg-mainColor !text-white hover:opacity-90":
+                              data.btcPlusRewardByAddress?.isEligible,
+                          }
+                        )}
+                        onClick={() => {
+                          data.btcPlusRewardByAddress?.isEligible &&
+                            window.open(
+                              "https://solv.foundation/btc+reward",
+                              "_blank"
+                            );
+                        }}
+                      >
                         <span className="text-sm">Claim</span>
                       </Button>
                     </Popover.Trigger>
@@ -164,10 +184,11 @@ const BoostRewards = () => {
                       side="top"
                       align="center"
                       className="!max-w-[300px]"
+                      hidden={data.btcPlusRewardByAddress?.isEligible}
                     >
                       <p className="text-sm">
-                        Claim your $SOLV Boost Rewards after the end of BTC+
-                        Phase 1 campaign.
+                        BTC+ Phase 1 Reward minimum claim is 10 $SOLV. Amounts
+                        below are not eligible to claim.
                       </p>
                     </Popover.Content>
                   </Popover.Root>
