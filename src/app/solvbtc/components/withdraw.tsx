@@ -5,7 +5,7 @@ import {
   useConnect,
   useReadContract,
   useWaitForTransactionReceipt,
-  useWriteContract
+  useWriteContract,
 } from "wagmi";
 import {
   Button,
@@ -14,7 +14,7 @@ import {
   Popover,
   Skeleton,
   Spinner,
-  Text
+  Text,
 } from "@radix-ui/themes";
 import classNames from "classnames";
 import Image from "next/image";
@@ -28,7 +28,7 @@ import withdrawAbi from "@/abi/solvbtc/withdraw.json";
 
 const Withdraw = ({
   redemptionFeeRate,
-  btcPoolInfo
+  btcPoolInfo,
 }: {
   redemptionFeeRate: string;
   btcPoolInfo: any;
@@ -41,7 +41,7 @@ const Withdraw = ({
     setTradingResultOpen,
     setTradingResultTitle,
     setTradingHash,
-    setTradingInfo
+    setTradingInfo,
   } = useStore();
 
   const wrappedToken = useMemo(() => {
@@ -67,13 +67,13 @@ const Withdraw = ({
   const {
     data: balance,
     isLoading: isLoadingBalance,
-    refetch: refetchBalance
+    refetch: refetchBalance,
   } = useReadContract({
     abi: erc20Abi,
     address: baseToken?.tokenAddress as Address,
     functionName: "balanceOf",
     args: [address as Address],
-    query: { enabled: !!address && !!baseToken?.tokenAddress }
+    query: { enabled: !!address && !!baseToken?.tokenAddress },
   });
 
   const formatBalance = useMemo(() => {
@@ -84,13 +84,13 @@ const Withdraw = ({
   const {
     data: allowance,
     refetch: refetchAllowance,
-    status: allowanceStatus
+    status: allowanceStatus,
   } = useReadContract({
     abi: erc20Abi,
     address: baseToken?.tokenAddress as Address,
     functionName: "allowance",
     args: [address as Address, routerContract],
-    query: { enabled: !!address && !!baseToken?.tokenAddress }
+    query: { enabled: !!address && !!baseToken?.tokenAddress },
   });
 
   // approve
@@ -98,7 +98,7 @@ const Withdraw = ({
     writeContract: approveWriteContract,
     isPending: approvePending,
     data: dataHash,
-    reset: resetApproveWrite
+    reset: resetApproveWrite,
   } = useWriteContract();
 
   const approveFun = async () => {
@@ -106,17 +106,17 @@ const Withdraw = ({
       abi: erc20Abi,
       address: baseToken?.tokenAddress as Address,
       functionName: "approve",
-      args: [routerContract, maxUint256]
+      args: [routerContract, maxUint256],
     });
   };
 
   const {
     isLoading: approveLoading,
     isSuccess: approveSuccess,
-    error: approveError
+    error: approveError,
   } = useWaitForTransactionReceipt({
     hash: dataHash,
-    query: { enabled: !!dataHash }
+    query: { enabled: !!dataHash },
   });
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const Withdraw = ({
     writeContract: withdrawWriteContract,
     isPending: withdrawPending,
     data: withdrawDataHash,
-    reset: resetWithdrawWrite
+    reset: resetWithdrawWrite,
   } = useWriteContract();
 
   const withdrawFun = async () => {
@@ -145,17 +145,17 @@ const Withdraw = ({
       abi: withdrawAbi,
       address: routerContract as Address,
       functionName: "createRedemption",
-      args: [poolId, parseUnits(withdrawAmount, baseToken?.decimals)]
+      args: [poolId, parseUnits(withdrawAmount, baseToken?.decimals)],
     });
   };
 
   const {
     isLoading: withdrawLoading,
     isSuccess: withdrawSuccess,
-    error: withdrawError
+    error: withdrawError,
   } = useWaitForTransactionReceipt({
     hash: withdrawDataHash,
-    query: { enabled: !!withdrawDataHash }
+    query: { enabled: !!withdrawDataHash },
   });
 
   useEffect(() => {
@@ -202,7 +202,7 @@ const Withdraw = ({
     withdrawLoading,
     setTradingOpen,
     setTradingHash,
-    setTradingInfo
+    setTradingInfo,
   ]);
 
   const depositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -257,7 +257,7 @@ const Withdraw = ({
           <span className="flex items-center gap-1">
             <span
               className={classNames("text-gray-500", {
-                "text-red-500": noBalance
+                "text-red-500": noBalance,
               })}
             >
               Balance:
@@ -267,7 +267,7 @@ const Withdraw = ({
             ) : (
               <span
                 className={classNames("pl-1", {
-                  "text-red-500": noBalance
+                  "text-red-500": noBalance,
                 })}
               >
                 {formatNumber(restrictDecimals(formatBalance, 4))}
@@ -283,7 +283,7 @@ const Withdraw = ({
               {
                 "border-gray-300 bg-white": mode === "light",
                 "bg-black border-transparent": mode === "dark",
-                "!border-red-500": noBalance
+                "!border-red-500": noBalance,
               }
             )}
           >
@@ -341,7 +341,7 @@ const Withdraw = ({
               {
                 "border-gray-300 bg-white": mode === "light",
                 "bg-black border-transparent": mode === "dark",
-                "!border-red-500": noBalance
+                "!border-red-500": noBalance,
               }
             )}
           >
@@ -372,7 +372,7 @@ const Withdraw = ({
             "flex items-start gap-2 rounded-lg p-3 pl-[18px]",
             {
               "bg-[#1d2129cc]": mode === "dark",
-              "bg-[#7667eb33]": mode === "light"
+              "bg-[#7667eb33]": mode === "light",
             }
           )}
         >
@@ -403,9 +403,13 @@ const Withdraw = ({
                 <>
                   {allowance && Number(allowance) > 0 ? (
                     <Button
-                      className="!w-full bg-transparent !rounded-full !h-10 !mt-4 !bg-mainColor"
-                      disabled={withdrawPending || withdrawLoading}
+                      className="!w-full bg-transparent !rounded-full !h-10 !mt-4 !bg-mainColor disabled:opacity-50 disabled:!bg-gray-500"
                       onClick={withdrawFun}
+                      disabled={
+                        withdrawPending ||
+                        withdrawLoading ||
+                        Number(withdrawAmount) === 0
+                      }
                     >
                       {(withdrawPending || withdrawLoading) && (
                         <Spinner loading></Spinner>

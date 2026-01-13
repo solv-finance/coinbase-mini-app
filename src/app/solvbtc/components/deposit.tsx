@@ -5,7 +5,7 @@ import {
   useConnect,
   useReadContract,
   useWaitForTransactionReceipt,
-  useWriteContract
+  useWriteContract,
 } from "wagmi";
 import { formatNumber, GET_TOKEN_ICON, restrictDecimals } from "@/lib";
 import BigNumber from "bignumber.js";
@@ -21,7 +21,7 @@ import depositAbi from "@/abi/solvbtc/deposit.json";
 
 const Deposit = ({
   solvBTCFee,
-  btcPoolInfo
+  btcPoolInfo,
 }: {
   solvBTCFee: string;
   btcPoolInfo: any;
@@ -34,7 +34,7 @@ const Deposit = ({
     setTradingInfo,
     setTradingResultOpen,
     setTradingResultTitle,
-    setTradingResultInfo
+    setTradingResultInfo,
   } = useStore();
 
   const baseToken = useMemo(() => {
@@ -61,13 +61,13 @@ const Deposit = ({
   const {
     data: balance,
     isLoading: isLoadingBalance,
-    refetch: refetchBalance
+    refetch: refetchBalance,
   } = useReadContract({
     abi: erc20Abi,
     address: baseToken?.currencyAddress as Address,
     functionName: "balanceOf",
     args: [address as Address],
-    query: { enabled: !!address && !!baseToken?.currencyAddress }
+    query: { enabled: !!address && !!baseToken?.currencyAddress },
   });
 
   const formatBalance = useMemo(() => {
@@ -78,13 +78,13 @@ const Deposit = ({
   const {
     data: allowance,
     refetch: refetchAllowance,
-    status: allowanceStatus
+    status: allowanceStatus,
   } = useReadContract({
     abi: erc20Abi,
     address: baseToken?.currencyAddress as Address,
     functionName: "allowance",
     args: [address as Address, routerContract],
-    query: { enabled: !!address && !!baseToken?.currencyAddress }
+    query: { enabled: !!address && !!baseToken?.currencyAddress },
   });
 
   // approve
@@ -92,7 +92,7 @@ const Deposit = ({
     writeContract: approveWriteContract,
     isPending: approvePending,
     data: dataHash,
-    reset: resetApproveWrite
+    reset: resetApproveWrite,
   } = useWriteContract();
 
   const approveFun = async () => {
@@ -100,17 +100,17 @@ const Deposit = ({
       abi: erc20Abi,
       address: baseToken?.currencyAddress as Address,
       functionName: "approve",
-      args: [routerContract, maxUint256]
+      args: [routerContract, maxUint256],
     });
   };
 
   const {
     isLoading: approveLoading,
     isSuccess: approveSuccess,
-    error: approveError
+    error: approveError,
   } = useWaitForTransactionReceipt({
     hash: dataHash,
-    query: { enabled: !!dataHash }
+    query: { enabled: !!dataHash },
   });
 
   useEffect(() => {
@@ -129,7 +129,7 @@ const Deposit = ({
     writeContract: depositWriteContract,
     isPending: depositPending,
     data: depositDataHash,
-    reset: resetDepositWrite
+    reset: resetDepositWrite,
   } = useWriteContract();
 
   const depositFun = async () => {
@@ -142,17 +142,17 @@ const Deposit = ({
       abi: depositAbi,
       address: routerContract as Address,
       functionName: "createSubscription",
-      args: [poolId, parseUnits(depositAmount, baseToken?.decimals)]
+      args: [poolId, parseUnits(depositAmount, baseToken?.decimals)],
     });
   };
 
   const {
     isLoading: depositLoading,
     isSuccess: depositSuccess,
-    error: depositError
+    error: depositError,
   } = useWaitForTransactionReceipt({
     hash: depositDataHash,
-    query: { enabled: !!depositDataHash }
+    query: { enabled: !!depositDataHash },
   });
 
   const [depositAmount, setDepositAmount] = useState("");
@@ -195,7 +195,7 @@ const Deposit = ({
     approveError,
     setTradingOpen,
     setTradingHash,
-    setTradingInfo
+    setTradingInfo,
   ]);
 
   const depositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -274,7 +274,7 @@ const Deposit = ({
           <span className="flex items-center gap-1">
             <span
               className={classNames("text-gray-500", {
-                "text-red-500": noBalance
+                "text-red-500": noBalance,
               })}
             >
               Balance:
@@ -284,7 +284,7 @@ const Deposit = ({
             ) : (
               <span
                 className={classNames("pl-1", {
-                  "text-red-500": noBalance
+                  "text-red-500": noBalance,
                 })}
               >
                 {formatNumber(restrictDecimals(formatBalance, 4))}
@@ -300,7 +300,7 @@ const Deposit = ({
               {
                 "border-gray-300 bg-white": mode === "light",
                 "bg-black border-transparent": mode === "dark",
-                "!border-red-500": noBalance
+                "!border-red-500": noBalance,
               }
             )}
           >
@@ -356,7 +356,7 @@ const Deposit = ({
               {
                 "border-gray-300 bg-white": mode === "light",
                 "bg-black border-transparent": mode === "dark",
-                "!border-red-500": noBalance
+                "!border-red-500": noBalance,
               }
             )}
           >
@@ -398,8 +398,13 @@ const Deposit = ({
                 <>
                   {allowance && Number(allowance) > 0 ? (
                     <Button
-                      className="!w-full bg-transparent !rounded-full !h-10 !mt-4 !bg-mainColor"
+                      className="!w-full bg-transparent !rounded-full !h-10 !mt-4 !bg-mainColor disabled:opacity-50 disabled:!bg-gray-500"
                       loading={depositPending || depositLoading}
+                      disabled={
+                        depositPending ||
+                        depositLoading ||
+                        Number(depositAmount) === 0
+                      }
                       onClick={depositFun}
                     >
                       <span className="text-[16px] font-MatterSQ-Regular">

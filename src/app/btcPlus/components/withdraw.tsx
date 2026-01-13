@@ -5,7 +5,7 @@ import {
   useConnect,
   useReadContract,
   useWaitForTransactionReceipt,
-  useWriteContract
+  useWriteContract,
 } from "wagmi";
 import {
   beautyAmount,
@@ -14,13 +14,13 @@ import {
   minus,
   multipliedBy,
   outputTokenAmount,
-  toFixed
+  toFixed,
 } from "@/lib/utils";
 import {
   formatNumber,
   GET_TOKEN_ICON,
   handleDepositExchangeRate,
-  restrictDecimals
+  restrictDecimals,
 } from "@/lib";
 import BigNumber from "bignumber.js";
 import classNames from "classnames";
@@ -43,7 +43,7 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     setTradingResultOpen,
     setTradingResultTitle,
     setTradingHash,
-    setTradingInfo
+    setTradingInfo,
   } = useStore();
 
   const { address, isConnected } = useAccount();
@@ -54,7 +54,7 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
   const {
     data: baseBalanceOf,
     refetch: refetchBaseBalance,
-    status: baseBalanceStatus
+    status: baseBalanceStatus,
   } = useReadContract({
     abi: erc20Abi,
     address: btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.tokenAddress,
@@ -62,8 +62,8 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     args: [address as Address],
     query: {
       enabled:
-        !!btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.tokenAddress && !!address
-    }
+        !!btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.tokenAddress && !!address,
+    },
   });
 
   const baseBalance = useMemo(() => {
@@ -77,7 +77,7 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
   const {
     data: targetBalanceOf,
     status: targetBalanceStatus,
-    refetch: refetchTargetBalance
+    refetch: refetchTargetBalance,
   } = useReadContract({
     abi: erc20Abi,
     address: btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.currencyAddress,
@@ -86,8 +86,8 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     query: {
       enabled:
         !!btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.currencyAddress &&
-        !!address
-    }
+        !!address,
+    },
   });
 
   const targetBalance = useMemo(() => {
@@ -97,22 +97,22 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     );
   }, [
     targetBalanceOf,
-    btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.decimals
+    btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.decimals,
   ]);
 
   // get allowed amount
   const {
     data: allowedAmountOf,
     refetch: refetchAllowance,
-    status: allowanceStatus
+    status: allowanceStatus,
   } = useReadContract({
     abi: erc20Abi,
     address: btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.tokenAddress,
     functionName: "allowance",
     args: [
       address as Address,
-      btcPoolInfo?.btcPoolInfo?.routerContract?.contractAddress
-    ]
+      btcPoolInfo?.btcPoolInfo?.routerContract?.contractAddress,
+    ],
   });
 
   const allowedAmount = useMemo(() => {
@@ -127,7 +127,7 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     writeContract: approveWriteContract,
     isPending: approvePending,
     data: dataHash,
-    reset: resetApproveWrite
+    reset: resetApproveWrite,
   } = useWriteContract();
 
   const approveFun = async () => {
@@ -138,18 +138,18 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
       functionName: "approve",
       args: [
         btcPoolInfo?.btcPoolInfo?.routerContract?.contractAddress,
-        maxUint256
-      ]
+        maxUint256,
+      ],
     });
   };
 
   const {
     isLoading: approveLoading,
     isSuccess: approveSuccess,
-    error: approveError
+    error: approveError,
   } = useWaitForTransactionReceipt({
     hash: dataHash,
-    query: { enabled: !!dataHash }
+    query: { enabled: !!dataHash },
   });
 
   useEffect(() => {
@@ -167,11 +167,11 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
   const { data: feeData } = useQuery(getSolvBTCFee, {
     variables: {
       poolId: btcPoolInfo?.btcPoolInfo?.poolInfo?.poolOrderInfo?.poolId,
-      symbol: btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.symbol
+      symbol: btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.symbol,
     },
     skip:
       !btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.symbol &&
-      !btcPoolInfo?.btcPoolInfo?.poolInfo?.poolOrderInfo?.poolId
+      !btcPoolInfo?.btcPoolInfo?.poolInfo?.poolOrderInfo?.poolId,
   });
 
   // get exchange rate
@@ -184,11 +184,11 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
           btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.decimals || 18
         )
       ),
-      poly: false
+      poly: false,
     });
   }, [
     btcPoolInfo?.btcPoolInfo?.poolInfo?.nav,
-    btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.decimals
+    btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.decimals,
   ]);
 
   const [baseTokenAmount, setBaseTokenAmount] = useState<string>("");
@@ -207,7 +207,7 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     writeContract: withdrawWriteContract,
     isPending: withdrawPending,
     data: withdrawDataHash,
-    reset: resetwithdrawWrite
+    reset: resetwithdrawWrite,
   } = useWriteContract();
 
   const withdrawFun = async () => {
@@ -221,18 +221,18 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
         parseUnits(
           baseTokenAmount,
           btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.decimals
-        )
-      ]
+        ),
+      ],
     });
   };
 
   const {
     isLoading: withdrawLoading,
     isSuccess: withdrawSuccess,
-    error: withdrawError
+    error: withdrawError,
   } = useWaitForTransactionReceipt({
     hash: withdrawDataHash,
-    query: { enabled: !!withdrawDataHash }
+    query: { enabled: !!withdrawDataHash },
   });
 
   useEffect(() => {
@@ -275,7 +275,7 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     setTradingInfo,
     resetwithdrawWrite,
     refetchBaseBalance,
-    refetchTargetBalance
+    refetchTargetBalance,
   ]);
 
   const withdrawChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -380,7 +380,7 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
           className={classNames(
             "mb-2 border border-solid border-transparent focus-within:border-mainColor transition-colors",
             {
-              "!border-red-500": noBalance
+              "!border-red-500": noBalance,
             }
           )}
         >
@@ -402,7 +402,7 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
                 "flex items-center gap-1 rounded-[6px] px-3 py-2 flex-shrink-0",
                 {
                   "bg-white/10": mode === "dark",
-                  "bg-black/10": mode === "light"
+                  "bg-black/10": mode === "light",
                 }
               )}
             >
@@ -430,7 +430,7 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
               <>
                 <span
                   className={classNames("text-grayColor text-xs", {
-                    "text-red-500": noBalance
+                    "text-red-500": noBalance,
                   })}
                 >
                   Balance: {formatNumber(restrictDecimals(baseBalance, 6))}
@@ -490,7 +490,7 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
           className={classNames(
             "border border-solid border-transparent focus-within:border-mainColor transition-colors",
             {
-              "!border-red-500": noBalance
+              "!border-red-500": noBalance,
             }
           )}
         >
@@ -512,7 +512,7 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
                 "flex items-center gap-1 rounded-[6px] px-3 py-2 flex-shrink-0",
                 {
                   "bg-white/10": mode === "dark",
-                  "bg-black/10": mode === "light"
+                  "bg-black/10": mode === "light",
                 }
               )}
             >
@@ -595,9 +595,14 @@ const Withdraw = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
                 <>
                   {Number(allowedAmount) ? (
                     <Button
-                      className="!w-full bg-transparent !rounded-full !h-10 !mt-4 !bg-mainColor"
+                      className="!w-full bg-transparent !rounded-full !h-10 !mt-4 !bg-mainColor disabled:opacity-50 disabled:!bg-gray-500"
                       onClick={withdrawFun}
                       loading={withdrawPending || withdrawLoading}
+                      disabled={
+                        withdrawPending ||
+                        withdrawLoading ||
+                        Number(baseTokenAmount) === 0
+                      }
                     >
                       <span className="text-[16px] font-MatterSQ-Regular">
                         Withdraw

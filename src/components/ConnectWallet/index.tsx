@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 import { Button, Popover } from "@radix-ui/themes";
@@ -16,6 +16,7 @@ interface UserInfo {
 
 export const ConnectWallet = () => {
   const [userInfo, setUserInfo] = useState<UserInfo>();
+  const hasAutoConnectedRef = useRef(false);
   const getInfo = async () => {
     const info: UserInfo = await sdk.context;
     setUserInfo(info);
@@ -30,9 +31,18 @@ export const ConnectWallet = () => {
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
 
+  // 只在首次挂载时自动连接一次
   useEffect(() => {
-    connect({ connector: connectors[0] });
-  }, [connect, connectors]);
+    if (
+      !hasAutoConnectedRef.current &&
+      !isConnected &&
+      connectors &&
+      connectors[0]
+    ) {
+      hasAutoConnectedRef.current = true;
+      connect({ connector: connectors[0] });
+    }
+  }, [connect, connectors, isConnected]);
 
   return (
     <div>

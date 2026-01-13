@@ -6,20 +6,20 @@ import {
   ChevronDownIcon,
   DropdownMenu,
   Flex,
-  Skeleton
+  Skeleton,
 } from "@radix-ui/themes";
 import {
   formatNumber,
   GET_TOKEN_ICON,
   handleDepositExchangeRate,
-  restrictDecimals
+  restrictDecimals,
 } from "@/lib";
 import {
   useAccount,
   useConnect,
   useReadContract,
   useWaitForTransactionReceipt,
-  useWriteContract
+  useWriteContract,
 } from "wagmi";
 import {
   dividedBy,
@@ -29,7 +29,7 @@ import {
   multipliedBy,
   outputTokenAmount,
   plus,
-  toFixed
+  toFixed,
 } from "@/lib/utils";
 import BigNumber from "bignumber.js";
 import classNames from "classnames";
@@ -54,14 +54,14 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     setTradingResultOpen,
     setTradingResultTitle,
     setTradingHash,
-    setTradingInfo
+    setTradingInfo,
   } = useStore();
 
   const { data: poolCurrencies } = useQuery(GetPoolCurrenciesQuery, {
     variables: {
-      poolId: btcPoolInfo?.btcPoolInfo?.poolInfo?.poolOrderInfo?.poolId
+      poolId: btcPoolInfo?.btcPoolInfo?.poolInfo?.poolOrderInfo?.poolId,
     },
-    skip: !btcPoolInfo?.btcPoolInfo?.poolInfo?.poolOrderInfo?.poolId
+    skip: !btcPoolInfo?.btcPoolInfo?.poolInfo?.poolOrderInfo?.poolId,
   });
 
   const [selectedCurrency, setSelectedCurrency] = useState<any>(null);
@@ -87,15 +87,15 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
   const {
     data: baseBalanceOf,
     status: baseBalanceStatus,
-    refetch: refetchBaseBalance
+    refetch: refetchBaseBalance,
   } = useReadContract({
     abi: erc20Abi,
     address: selectedCurrency?.currencyAddress,
     functionName: "balanceOf",
     args: [address as Address],
     query: {
-      enabled: !!selectedCurrency?.currencyAddress && !!address
-    }
+      enabled: !!selectedCurrency?.currencyAddress && !!address,
+    },
   });
 
   const baseBalance = useMemo(() => {
@@ -105,7 +105,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
   const {
     data: targetBalanceOf,
     refetch: refetchTargetBalance,
-    status: targetBalanceStatus
+    status: targetBalanceStatus,
   } = useReadContract({
     abi: erc20Abi,
     address: btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.tokenAddress,
@@ -113,8 +113,8 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     args: [address as Address],
     query: {
       enabled:
-        !!btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.tokenAddress && !!address
-    }
+        !!btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.tokenAddress && !!address,
+    },
   });
 
   // get target balance
@@ -129,15 +129,15 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
   const {
     data: allowedAmountOf,
     refetch: refetchAllowance,
-    status: allowanceStatus
+    status: allowanceStatus,
   } = useReadContract({
     abi: erc20Abi,
     address: selectedCurrency?.currencyAddress,
     functionName: "allowance",
     args: [
       address as Address,
-      btcPoolInfo?.btcPoolInfo?.routerContract?.contractAddress
-    ]
+      btcPoolInfo?.btcPoolInfo?.routerContract?.contractAddress,
+    ],
   });
 
   const allowedAmount = useMemo(() => {
@@ -152,7 +152,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     writeContract: approveWriteContract,
     isPending: approvePending,
     data: dataHash,
-    reset: resetApproveWrite
+    reset: resetApproveWrite,
   } = useWriteContract();
 
   const approveFun = async () => {
@@ -162,18 +162,18 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
       functionName: "approve",
       args: [
         btcPoolInfo?.btcPoolInfo?.routerContract?.contractAddress,
-        maxUint256
-      ]
+        maxUint256,
+      ],
     });
   };
 
   const {
     isLoading: approveLoading,
     isSuccess: approveSuccess,
-    error: approveError
+    error: approveError,
   } = useWaitForTransactionReceipt({
     hash: dataHash,
-    query: { enabled: !!dataHash }
+    query: { enabled: !!dataHash },
   });
 
   useEffect(() => {
@@ -191,11 +191,11 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
   const { data: feeData, refetch: refetchFee } = useQuery(getSolvBTCFee, {
     variables: {
       poolId: btcPoolInfo?.btcPoolInfo?.poolInfo?.poolOrderInfo?.poolId,
-      symbol: selectedCurrency?.symbol
+      symbol: selectedCurrency?.symbol,
     },
     skip:
       !selectedCurrency?.symbol &&
-      !btcPoolInfo?.btcPoolInfo?.poolInfo?.poolOrderInfo?.poolId
+      !btcPoolInfo?.btcPoolInfo?.poolInfo?.poolOrderInfo?.poolId,
   });
 
   // get exchange rate
@@ -208,7 +208,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
   }, [
     feeData?.solvbtcFee,
     btcPoolInfo?.btcPoolInfo?.poolInfo?.nav,
-    btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.decimals
+    btcPoolInfo?.btcPoolInfo?.poolInfo?.currencyInfo?.decimals,
   ]);
 
   const [baseTokenAmount, setBaseTokenAmount] = useState<string>("");
@@ -231,7 +231,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     writeContract: depositWriteContract,
     isPending: depositPending,
     data: depositDataHash,
-    reset: resetDepositWrite
+    reset: resetDepositWrite,
   } = useWriteContract();
 
   const depositFun = async () => {
@@ -250,23 +250,23 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
               targetTokenAmount,
               btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.decimals
             ),
-            expireTime
+            expireTime,
           ]
         : [
             btcPoolInfo?.btcPoolInfo?.wrappedTokenInfo?.tokenAddress,
             selectedCurrency?.currencyAddress,
-            parseUnits(baseTokenAmount, selectedCurrency?.decimals)
-          ]
+            parseUnits(baseTokenAmount, selectedCurrency?.decimals),
+          ],
     });
   };
 
   const {
     isLoading: depositLoading,
     isSuccess: depositSuccess,
-    error: depositError
+    error: depositError,
   } = useWaitForTransactionReceipt({
     hash: depositDataHash,
-    query: { enabled: !!depositDataHash }
+    query: { enabled: !!depositDataHash },
   });
 
   useEffect(() => {
@@ -309,7 +309,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
     refetchTargetBalance,
     depositLoading,
     depositError,
-    depositSuccess
+    depositSuccess,
   ]);
 
   const depositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -414,7 +414,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
           className={classNames(
             "mb-2 border border-solid border-transparent focus-within:border-mainColor transition-colors",
             {
-              "!border-red-500": noBalance
+              "!border-red-500": noBalance,
             }
           )}
         >
@@ -439,7 +439,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
                     "flex items-center gap-1 rounded-[6px] px-3 py-2 flex-shrink-0",
                     {
                       "bg-white/10": mode === "dark",
-                      "bg-black/10": mode === "light"
+                      "bg-black/10": mode === "light",
                     }
                   )}
                 >
@@ -494,7 +494,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
               <>
                 <span
                   className={classNames("text-grayColor text-xs", {
-                    "text-red-500": noBalance
+                    "text-red-500": noBalance,
                   })}
                 >
                   Balance: {formatNumber(restrictDecimals(baseBalance, 6))}
@@ -554,7 +554,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
           className={classNames(
             "border border-solid border-transparent focus-within:border-mainColor transition-colors",
             {
-              "!border-red-500": noBalance
+              "!border-red-500": noBalance,
             }
           )}
         >
@@ -576,7 +576,7 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
                 "flex items-center gap-1 rounded-[6px] px-3 py-2 flex-shrink-0",
                 {
                   "bg-white/10": mode === "dark",
-                  "bg-black/10": mode === "light"
+                  "bg-black/10": mode === "light",
                 }
               )}
             >
@@ -666,9 +666,14 @@ const Deposit = ({ btcPoolInfo }: { btcPoolInfo: any }) => {
                   <>
                     {Number(allowedAmount) ? (
                       <Button
-                        className="!w-full bg-transparent !rounded-full !h-10 !mt-4 !bg-mainColor"
+                        className="!w-full bg-transparent !rounded-full !h-10 !mt-4 !bg-mainColor disabled:opacity-50 disabled:!bg-gray-500"
                         onClick={depositFun}
                         loading={depositPending || depositLoading}
+                        disabled={
+                          depositPending ||
+                          depositLoading ||
+                          Number(baseTokenAmount) === 0
+                        }
                       >
                         <span className="text-[16px] font-MatterSQ-Regular">
                           Deposit
