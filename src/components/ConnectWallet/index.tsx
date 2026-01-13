@@ -47,29 +47,11 @@ export const ConnectWallet = () => {
   return (
     <div>
       {isConnected ? (
-        <Popover.Root>
-          <Popover.Trigger>
-            <div className="flex items-center gap-2">
-              <div className="border border-solid border-gray-500 rounded-full text-[12px] px-2 py-1 flex items-center gap-1">
-                <span>{address ? formatAddress(address, 6, 4) : "--"}</span>
-                <ChevronDownIcon width={12} height={12} />
-              </div>
-            </div>
-          </Popover.Trigger>
-          <Popover.Content>
-            <div className="text-sm mb-2">
-              {userInfo?.user?.displayName && (
-                <div>Name: {userInfo?.user?.displayName || "--"}</div>
-              )}
-            </div>
-            <Button
-              className="!bg-mainColor !rounded-2xl"
-              onClick={() => disconnect()}
-            >
-              Disconnect
-            </Button>
-          </Popover.Content>
-        </Popover.Root>
+        <div className="flex items-center gap-2">
+          <div className="border border-solid border-gray-500 rounded-full text-[12px] px-2 py-1 flex items-center gap-1">
+            <span>{address ? formatAddress(address, 6, 4) : "--"}</span>
+          </div>
+        </div>
       ) : (
         <>
           {connectors && connect && (
