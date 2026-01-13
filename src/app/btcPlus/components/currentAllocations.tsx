@@ -96,22 +96,6 @@ const Demo = () => {
             )}
           </div>
         </Flex>
-        <Flex justify="center" className="h-[auto] w-full">
-          {loading ? (
-            <Flex justify="center" className="size-full">
-              <Skeleton
-                className={classNames("!h-[12rem] !w-[12rem] !rounded-full")}
-              ></Skeleton>
-            </Flex>
-          ) : (
-            <Flex justify="center" className="relative size-full">
-              <AllocationsCharts
-                data={btcPlusAllocations?.btcPlusAllocations.allocations}
-                tvl={btcPlusAllocations?.btcPlusAllocations.tvl}
-              ></AllocationsCharts>
-            </Flex>
-          )}
-        </Flex>
       </Flex>
     </Card>
   );
