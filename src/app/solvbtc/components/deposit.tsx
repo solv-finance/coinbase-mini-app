@@ -413,12 +413,15 @@ const Deposit = ({
                     </Button>
                   ) : (
                     <Button
-                      className="!w-full bg-transparent !rounded-full !h-10 !mt-4 !bg-mainColor"
+                      className="!w-full bg-transparent !rounded-full !h-10 !mt-4 !bg-mainColor disabled:opacity-50 disabled:!bg-gray-500"
                       loading={approvePending || approveLoading}
+                      disabled={
+                        approvePending || approveLoading || depositAmount === ""
+                      }
                       onClick={approveFun}
                     >
                       <span className="text-[16px] font-MatterSQ-Regular">
-                        Approve
+                        {depositAmount === "" ? "Deposit" : "Approve"}
                       </span>
                     </Button>
                   )}

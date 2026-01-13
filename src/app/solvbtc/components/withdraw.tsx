@@ -420,15 +420,19 @@ const Withdraw = ({
                     </Button>
                   ) : (
                     <Button
-                      className="!w-full bg-transparent !rounded-full !h-10 !mt-4 !bg-mainColor"
-                      disabled={approvePending || approveLoading}
+                      className="!w-full bg-transparent !rounded-full !h-10 !mt-4 !bg-mainColor disabled:opacity-50 disabled:!bg-gray-500"
+                      disabled={
+                        approvePending ||
+                        approveLoading ||
+                        withdrawAmount === ""
+                      }
                       onClick={approveFun}
                     >
                       {(approvePending || approveLoading) && (
                         <Spinner loading></Spinner>
                       )}
                       <span className="text-[16px] font-MatterSQ-Regular">
-                        Approve
+                        {withdrawAmount === "" ? "Withdraw" : "Approve"}
                       </span>
                     </Button>
                   )}
